@@ -1,6 +1,7 @@
 /* TurboNinja.js */
 function startTurboNinja(div)
 {
+	
 	var bluePaddle = new Image();
 	bluePaddle.src = "./img/bluePaddle.png";
 		
@@ -33,13 +34,20 @@ function startTurboNinja(div)
 			}
 		}
 	);
+	function mapRawCanvasX(position, scale){
+		return position*scale - $(canvas).width()*(scale-1)/2;
+	}
+	function mapRawCanvasY(position, scale){
+		return position*scale - $(canvas).height()*(scale-1)/2;
+	}	
+		
 	setInterval(function(){
 		canvas.context.fillStyle = "rgb(0,0,255)";
 		canvas.context.clearRect(0,0,canvas.width,canvas.height);
 		if(window.phone.x!=-1 && window.phone.y!=-1)
-			canvas.context.drawImage(bluePaddle, (window.phone.x*1.7)-54, (window.phone.y*1.7)-54);
+			canvas.context.drawImage(bluePaddle, mapRawCanvasX(window.phone.x,1.7)-54, mapRawCanvasY(window.phone.y,1.7)-54);
 		if(window.other.x!=-1 && window.other.y!=-1)
-			canvas.context.drawImage(bluePaddle, (window.other.x*1.7)-54, (window.other.y*1.7)-54);
+			canvas.context.drawImage(bluePaddle, mapRawCanvasX(window.other.x,1.7)-54, mapRawCanvasY(window.other.y,1.7)-54);
 	},33);
 		
 }
