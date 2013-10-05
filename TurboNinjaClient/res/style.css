@@ -1,0 +1,13 @@
+body {
+	background-image: url('../img/bg.png');
+	background-size: cover;
+}
+
+.magenta {
+	width: 240px;
+	height: 240px;
+	border-radius: 120px;
+	background-color: magenta;
+	margin: 0 auto;
+	margin-top: 100px;
+}
