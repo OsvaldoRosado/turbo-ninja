@@ -1,6 +1,6 @@
 $(document).ready(function(){
-	window.phone = {x:null,y:null};
-	window.other = {x:null,y:null};
+	window.phone = {x:-1,y:-1};
+	window.other = {x:-1,y:-1};
 });
 
 // Game Manager
@@ -57,7 +57,7 @@ var gameManager = {
 			var coords = snapshot.val();
 			if(snapshot.name() == "hostCursor" && gameManager.isHost == false){
 				window.other = coords;
-			}else if(gameManager.isHost == true){
+			}else if(snapshot.name() == "guestCursor" && gameManager.isHost == true){
 				window.other = coords;
 			}
 		});

@@ -28,17 +28,17 @@ function startTurboNinja(div)
 				window.phone.y = (canvas.height/webcam.canvas.context.canvas.clientHeight)*track.y;
 			},
 			onNotFound: function() {
-				window.phone.x=null;
-				window.phone.y=null;
+				window.phone.x=-1;
+				window.phone.y=-1;
 			}
 		}
 	);
 	setInterval(function(){
 		canvas.context.fillStyle = "rgb(0,0,255)";
 		canvas.context.clearRect(0,0,canvas.width,canvas.height);
-		if(window.phone.x!=null && window.phone.y!=null)
+		if(window.phone.x!=-1 && window.phone.y!=-1)
 			canvas.context.drawImage(bluePaddle, (window.phone.x*1.7)-54, (window.phone.y*1.7)-54);
-		if(window.other.x!=null && window.other.y!=null)
+		if(window.other.x!=-1 && window.other.y!=-1)
 			canvas.context.drawImage(bluePaddle, (window.other.x*1.7)-54, (window.other.y*1.7)-54);
 	},33);
 		
