@@ -9,6 +9,10 @@ handlers:
   static_files : index.html
   upload: (.*?)
   
+- url: /desktop
+  static_files : desktop.html
+  upload: (.*?)
+  
 - url: /img
   static_dir: img
   
