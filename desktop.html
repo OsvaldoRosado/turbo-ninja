@@ -4,8 +4,12 @@
 		<link rel="stylesheet" type="text/css" href="./res/desktop.css">
 		
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="vendor/trackingjs/tracking.js"></script>
+		<script src="vendor/trackingjs/color.js"></script>
 		<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
-		<script type="text/javascript" src='./res/desktop.js'></script>
+		
+		<script type="text/javascript" src='./res/tracker.js'></script>
+		<script type="text/javascript" src='./res/game.js'></script>
 	</head>
 	<body>
 		<div id="startSelect">
@@ -16,8 +20,7 @@
 			<h1>12345</h1>
 		</div>
 		<div id="game" style="display:none;">
-			<div class="cursor" id="hostCursor"></div>
-			<div class="cursor" id="guestCursor"></div>
+			<div id="gameDiv"></div>
 		</div>
 	</body>
 </html>

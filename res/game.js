@@ -1,9 +1,6 @@
-// Mouse Tracking
-jQuery(document).ready(function(){
-   $("body").on("mousemove",function(e){
-      window.mouseXPos = e.pageX;
-      window.mouseYPos = e.pageY;
-   }); 
+$(document).ready(function(){
+	window.phone = {x:null,y:null};
+	window.other = {x:null,y:null};
 });
 
 // Game Manager
@@ -53,21 +50,22 @@ var gameManager = {
 	
 	startGaming: function(gameID){
 		$("#showID").hide(); $("#startSelect").hide(); $("#game").show();
+		startTurboNinja("gameDiv");
 		
 		var game = new Firebase(gameManager.url + "/" + gameID);
 		game.on('child_changed', function(snapshot) {
 			var coords = snapshot.val();
-			if(snapshot.name() == "hostCursor"){
-				$("#hostCursor").css("left",coords.x).css("top",coords.y);
-			}else{
-				$("#guestCursor").css("left",coords.x).css("top",coords.y);
+			if(snapshot.name() == "hostCursor" && gameManager.isHost == false){
+				window.other = coords;
+			}else if(gameManager.isHost == true){
+				window.other = coords;
 			}
 		});
 		
 		setInterval(function(){
 			var cursor = new Firebase(
 				gameManager.url + "/" + gameID + "/" + ((gameManager.isHost)?"hostCursor":"guestCursor"));
-			cursor.update({x:window.mouseXPos, y:window.mouseYPos});
+			cursor.update({x:window.phone.x, y:window.phone.y});
 		},100);
 	}
 }
