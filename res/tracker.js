@@ -4,6 +4,9 @@ function startTurboNinja(div)
 	
 	var bluePaddle = new Image();
 	bluePaddle.src = "./img/bluePaddle.png";
+	
+	var redPaddle = new Image();
+	redPaddle.src = "./img/redPaddle.png";
 		
 	var canvasContainer = document.getElementById(div);
 	var canvas = document.createElement('canvas');
@@ -44,10 +47,10 @@ function startTurboNinja(div)
 	setInterval(function(){
 		canvas.context.fillStyle = "rgb(0,0,255)";
 		canvas.context.clearRect(0,0,canvas.width,canvas.height);
+		if(window.other.x!=-1 && window.other.y!=-1)
+			canvas.context.drawImage(redPaddle, mapRawCanvasX(window.other.x,.56)-18, mapRawCanvasY(window.other.y,.56)-18);
 		if(window.phone.x!=-1 && window.phone.y!=-1)
 			canvas.context.drawImage(bluePaddle, mapRawCanvasX(window.phone.x,1.7)-54, mapRawCanvasY(window.phone.y,1.7)-54);
-		if(window.other.x!=-1 && window.other.y!=-1)
-			canvas.context.drawImage(bluePaddle, mapRawCanvasX(window.other.x,1.7)-54, mapRawCanvasY(window.other.y,1.7)-54);
 	},33);
 		
 }
