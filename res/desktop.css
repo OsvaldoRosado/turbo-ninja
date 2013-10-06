@@ -14,13 +14,13 @@ body {
 	background-size: 35px 35px;
 }
 
-#startSelect {
+#startSelect, #connectMobile {
 	width: 300px;
 	margin: 0 auto;
 	margin-top: 60px;	
 }
 
-#startSelect input {
+#startSelect input, #connectMobile input {
 	width: 300px;
 	height: 40px;
 	margin: 10px;
