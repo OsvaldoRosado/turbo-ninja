@@ -9,6 +9,7 @@
 		<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
 		<script src="./vendor/shakejs/shake.js"></script>
 		<script>
+		var hitSound = new Audio('./img/hitsound.wav');
 		function getUrlVars() { 
 			var vars = {}; 
 			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { 
@@ -16,10 +17,19 @@
 			}); 
 			return vars; 
 		}
+		var hitPlayer = 0;
 		var messageObject = new Firebase('https://turbo-ninja.firebaseIO.com/games/'+getUrlVars()['gameID']);
 		window.addEventListener('shake', function(){
 			messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
 		}, false);
+		messageObject.on('child_added', function(snapshot) {
+			if(snapshot.name()=="ball"){
+				if(snapshot.val().dz!=0){
+					//Ball was hit!
+					hitSound.play();
+				}
+			}	
+		});
 			
 			
 		/*$(window).load(function(){
