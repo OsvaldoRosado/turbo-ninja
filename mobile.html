@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- Osvaldo Rosado, Keaton Brandt, 2013 -->
+<html>
+	<head>
+		<title>TurboNinja Controller</title>
+		<link rel="stylesheet" href="res/style.css" type="text/css">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
+		<script src="./vendor/shakejs/shake.js"></script>
+		<script>
+		function getUrlVars() { 
+			var vars = {}; 
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { 
+				vars[key] = value; 
+			}); 
+			return vars; 
+		}
+		var messageObject = new Firebase('https://turbo-ninja.firebaseIO.com/games/'+getUrlVars()['gameID']);
+		window.addEventListener('shake', function(){
+			messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
+		}, false);
+			
+			
+		/*$(window).load(function(){
+			
+			window.addEventListener('shake', shakeEventDidOccur, false);
+			function shakeEventDidOccur () {
+				alert("STRAIGHT SHOOKEN");
+				messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
+			}
+			
+			$("body").bind("click",function(){
+				alert("Tapped");
+				messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
+			});
+		});*/
+		</script>
+	</head>
+	<body>
+		<div class="magenta"></div>
+	</body>
+</html>

@@ -24,20 +24,14 @@ var gameManager = {
 	
 	// Constants
 	startSpeed: {x: 0, y: 0, z: 1},
-	hitThreshold: 40,
-	speedIncreaseFactor: 1.25,
+	hitThreshold: 50,
+	speedIncreaseFactor: 1.15,
 	paddleConcave: 1,
 	
 	showQRCode: function(gameID, callback){
 		$("#showID").show(); $("#startSelect").show(); $("#connectMobile").show();
 		
-		/*$('#qrcode').qrcode({
-			width: 240,
-			height: 240, 
-			text: "google.com"});//"http://turbo-ninja-client.appspot.com/?gameID="+gameID+"&userID="+gameManager.userToken});
-		*/
-		
-		var url = encodeURIComponent("http://turbo-ninja-client.appspot.com/?gameID="+gameID+"&userID="+gameManager.userToken);
+		var url = encodeURIComponent("http://turbo-ninja-client.appspot.com/mobile?gameID="+gameID+"&userID="+gameManager.userToken);
 		$("#qrcode").attr("src","https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl="+url);
 		$("#qrContinue").bind("click",function(){
 			$("#qrContinue").val("Please Wait...");
@@ -127,7 +121,7 @@ var gameManager = {
 			if(snapshot.name() == "isLaunching"){
 				gameManager.isLaunching = snapshot.val();
 				if(!gameManager.isLaunching)return;
-				if(gameManager.isResponsible)
+				if(!gameManager.isResponsible)
 				{
 					$("#scrm").html(parseInt($("#scrm").html())+1);
 				}else{
@@ -206,9 +200,19 @@ var gameManager = {
 	
 	// Loop to test the ball's position
 	trackBall: function(){
+		
+		var bp = gameManager.ballPosition();
+		
+		// Bouncing
+		/*if(bp.x > 320 && gameManager.ball.dx > 0){gameManager.ball.dx = -gameManager.ball.dx; console.log("B1");}
+		else if(bp.x < 0 && gameManager.ball.dx < 0){gameManager.ball.dx = -gameManager.ball.dx; console.log("B2");}
+		
+		if(bp.y > 240 && gameManager.ball.dy > 0){gameManager.ball.dy = -gameManager.ball.dy; console.log("B3");}
+		else if(bp.y < 0 && gameManager.ball.dy < 0){gameManager.ball.dy = -gameManager.ball.dy; console.log("B4");}*/
+		
+		
 		if(!gameManager.isResponsible || gameManager.isLaunching)return;
 		var threshold = (gameManager.isHost)?1:-1;
-		var bp = gameManager.ballPosition();
 		if(bp.z >= 1){
 			// Ball has reached you
 			console.log("XThresh: "+Math.abs(bp.x - window.phone.x));

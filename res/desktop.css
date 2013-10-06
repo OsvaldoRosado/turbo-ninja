@@ -14,10 +14,10 @@ body {
 	background-size: 35px 35px;
 }
 
-#startSelect, #connectMobile {
+#startSelect, #connectMobile, #showID {
 	width: 300px;
 	margin: 0 auto;
-	margin-top: 60px;	
+	margin-top: 30px;
 }
 
 #startSelect input, #connectMobile input {
@@ -25,6 +25,23 @@ body {
 	height: 40px;
 	margin: 10px;
 	background-color: #F9574A;
+}
+
+#showID #idBox {
+	margin: 10px;
+	text-align: center;
+	padding: 10px 0px;
+	width: 290px;
+	background-color: #ccc;
+	border: 5px solid #fff;
+}
+
+#logo {
+	display: block;
+	width: 300px;
+	margin: 0 auto;
+	padding: 0px 10px;
+	padding-top: 30px;
 }
 
 .cursor {
@@ -43,7 +60,7 @@ body {
 	display: block;
 	position: relative;
 	margin: 0 auto;
-	margin-top: 50px
+	margin-top: 20px
 }
 
 #gameWindow {
@@ -78,3 +95,5 @@ body {
 	padding: 0px 20px 0px 10px;
 	display: inline;
 }
+
+#qrcode {padding: 0px 10px;}

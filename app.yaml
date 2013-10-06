@@ -9,8 +9,8 @@ handlers:
   static_files : index.html
   upload: (.*?)
   
-- url: /desktop
-  static_files : desktop.html
+- url: /mobile
+  static_files : mobile.html
   upload: (.*?)
   
 - url: /img

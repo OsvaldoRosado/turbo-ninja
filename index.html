@@ -1,43 +1,40 @@
-<!DOCTYPE html>
-<!-- Osvaldo Rosado, Keaton Brandt, 2013 -->
+<!doctype html>
 <html>
 	<head>
-		<title>TurboNinja Controller</title>
-		<link rel="stylesheet" href="res/style.css" type="text/css">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<link rel="stylesheet" type="text/css" href="./res/desktop.css">
+		
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="vendor/trackingjs/tracking.js"></script>
+		<script src="vendor/trackingjs/color.js"></script>
+		<script src="vendor/jquery-qrcode/jquery.qr.min.js"></script>
 		<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
-		<script src="./vendor/shakejs/shake.js"></script>
-		<script>
-		function getUrlVars() { 
-			var vars = {}; 
-			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { 
-				vars[key] = value; 
-			}); 
-			return vars; 
-		}
-		var messageObject = new Firebase('https://turbo-ninja.firebaseIO.com/games/'+getUrlVars()['gameID']);
-		window.addEventListener('shake', function(){
-			messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
-		}, false);
-			
-			
-		/*$(window).load(function(){
-			
-			window.addEventListener('shake', shakeEventDidOccur, false);
-			function shakeEventDidOccur () {
-				alert("STRAIGHT SHOOKEN");
-				messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
-			}
-			
-			$("body").bind("click",function(){
-				alert("Tapped");
-				messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
-			});
-		});*/
-		</script>
+		
+		<script type="text/javascript" src='./res/tracker.js'></script>
+		<script type="text/javascript" src='./res/game.js'></script>
+		<script type="text/javascript" src='./res/ui.js'></script>
 	</head>
 	<body>
-		<div class="magenta"></div>
+		<img src="./img/Logo.png" id="logo">
+		<div id="startSelect">
+			<input type="button" onClick="$('#showID h1').html(gameManager.createGame());$('#showID').show()" value="Create Game">
+			<input type="button" onClick="gameManager.joinGame(prompt('Enter the game ID'))" value="Join Game">
+		</div>
+		<div id="showID" style="display: none;">
+			<div id="idBox">
+				<p>Game ID:</p>
+				<h1>12345</h1>
+			</div>
+		</div>
+		<div id="connectMobile" style="display: none;">
+			<img id="qrcode" src="">
+			<input type="button" id="qrContinue" value="Start!">
+		</div>
+		<div id="game" style="display:none;">
+			<div id="gameDiv">
+				<div id="ui">
+					<div id="scores"><span>Me: <p id="scrm">0</p></span><span>Them: <p id="scrt">0</p></span></div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
