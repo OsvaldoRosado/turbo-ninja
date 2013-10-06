@@ -23,6 +23,7 @@ var gameManager = {
 	// Constants
 	startSpeed: {x: 0, y: 0, z: 1},
 	hitThreshold: 40,
+	speedIncreaseFactor: 1.5;
 	
 	createGame: function(){
 		// Create game
@@ -166,11 +167,15 @@ var gameManager = {
 			console.log("YThresh: "+Math.abs(bp.y - window.phone.y));
 			if((Math.abs(bp.x - window.phone.x) < gameManager.hitThreshold) && (Math.abs(bp.y - window.phone.y) < gameManager.hitThreshold)){
 				
-				console.log("HOLY SHIT YOU HIT IT YOU MIRACLE WORKER OH MY GOD");
+				// You hit the ball!
+				// We need to determine the bounce angle
 				
 				gameManager.lastHitTime = new Date().getTime();
 				gameManager.ball.hitPlayer = gameManager.responsible;
 				gameManager.responsible = (gameManager.responsible==1)?0:1;
+				gameManager.ball.dx = bp.x-window.phone.x;
+				gameManager.ball.dy = bp.y-window.phone.y;
+				gameManager.ball.dz *= gameManager.speedIncreaseFactor;
 				
 				gameManager.game.update({hitCount: gameManager.hitCount++, ball:gameManager.ball, responsible: gameManager.responsible});
 				
