@@ -17,7 +17,8 @@ function startTurboNinja(div)
 	canvas.width = 800;
 	canvas.height = 600;
 	canvas.style.border = "1px solid black";
-	canvas.style.background = "url('./img/arena.gif')";
+	canvas.style.background = "url('./img/arena.png')";
+	canvas.style.backgroundSize = "100% 100%";
 	canvas.context = canvas.getContext("2d");
 	canvasContainer.appendChild(canvas);
 	

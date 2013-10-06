@@ -10,6 +10,7 @@
 		
 		<script type="text/javascript" src='./res/tracker.js'></script>
 		<script type="text/javascript" src='./res/game.js'></script>
+		<script type="text/javascript" src='./res/ui.js'></script>
 	</head>
 	<body>
 		<div id="startSelect">
@@ -20,7 +21,11 @@
 			<h1>12345</h1>
 		</div>
 		<div id="game" style="display:none;">
-			<div id="gameDiv"></div>
+			<div id="gameDiv">
+				<div id="ui">
+					<div id="scores"><span>Me: <p id="scrm">0</p></span><span>Them: <p id="scrt">0</p></span></div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

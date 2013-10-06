@@ -6,7 +6,12 @@
 
 html,body {
 	width: 100%;
-	height: 100%;	
+	height: 100%;
+}
+
+body {
+	background-image:url('../img/bg.png');	
+	background-size: 35px 35px;
 }
 
 #startSelect {
@@ -31,3 +36,43 @@ html,body {
 
 #hostCursor {background-color: red;}
 #guestCursor {background-color: blue;}
+
+#gameDiv {
+	margin-top: 50px;
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: relative;
+}
+
+#gameWindow {
+	margin: 0 auto;
+	vertical-align: middle;
+	display: table-cell;
+}
+
+/* UI */
+
+#ui {
+	position: relative;
+	width: 800px;
+	height: 600px;
+	margin: 0 auto;
+	z-index: 100;
+}
+
+#ui #scores {
+	position: absolute;
+	width: 400px;
+	left: 200px;
+	bottom: 0px;
+	font-size: 24px;
+}
+
+#ui #scores span {width: 200px; text-align: center;}
+
+#ui #scores p {
+	font-weight: bold;
+	padding: 0px 20px 0px 10px;
+	display: inline;
+}

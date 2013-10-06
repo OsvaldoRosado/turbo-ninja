@@ -23,7 +23,8 @@ var gameManager = {
 	// Constants
 	startSpeed: {x: 0, y: 0, z: 1},
 	hitThreshold: 40,
-	speedIncreaseFactor: 1.5,
+	speedIncreaseFactor: 1.25,
+	paddleConcave: 1,
 	
 	createGame: function(){
 		// Create game
@@ -173,14 +174,13 @@ var gameManager = {
 				gameManager.lastHitTime = new Date().getTime();
 				gameManager.ball.hitPlayer = gameManager.responsible;
 				gameManager.responsible = (gameManager.responsible==1)?0:1;
-				gameManager.ball.dx = bp.x-window.phone.x;
-				gameManager.ball.dy = bp.y-window.phone.y;
+				gameManager.ball.dx = bp.x-window.phone.x * gameManager.paddleConcave;
+				gameManager.ball.dy = bp.y-window.phone.y * gameManager.paddleConcave;
 				gameManager.ball.dz *= gameManager.speedIncreaseFactor;
 				
 				gameManager.game.update({hitCount: gameManager.hitCount++, ball:gameManager.ball, responsible: gameManager.responsible});
 				
 			}else{
-				alert("NOO YOU MISSED WHY");
 				
 				gameManager.responsible = (gameManager.responsible==1)?0:1;
 				gameManager.ball.hitPlayer = gameManager.responsible;
