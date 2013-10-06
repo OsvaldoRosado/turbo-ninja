@@ -120,8 +120,20 @@ var gameManager = {
 			// Update cursors
 			if(snapshot.name().indexOf("Cursor")!==-1)return gameManager.updateCursors(snapshot);
 			
-			if(snapshot.name() == "ball"){gameManager.lastHitTime = new Date().getTime();gameManager.ball = snapshot.val();}
-			if(snapshot.name() == "isLaunching")gameManager.isLaunching = snapshot.val();
+			if(snapshot.name() == "ball"){
+				gameManager.lastHitTime = new Date().getTime();
+				gameManager.ball = snapshot.val();
+			}
+			if(snapshot.name() == "isLaunching"){
+				gameManager.isLaunching = snapshot.val();
+				if(!gameManager.isLaunching)return;
+				if(gameManager.isResponsible)
+				{
+					$("#scrm").html(parseInt($("#scrm").html())+1);
+				}else{
+					$("#scrt").html(parseInt($("#scrt").html())+1);
+				}	
+			}
 			if(snapshot.name() == "responsible"){
 				gameManager.responsible = snapshot.val();
 				gameManager.isResponsible = (gameManager.isHost)?(gameManager.responsible==0):(gameManager.responsible==1);}
@@ -216,14 +228,6 @@ var gameManager = {
 				gameManager.game.update({hitCount: gameManager.hitCount++, ball:gameManager.ball, responsible: gameManager.responsible});
 				
 			}else{
-				// Update the scores
-				if(!gameManager.responsible)
-				{
-					$("#scrm").text(parseInt($("#scrm").val())+1);
-				}else{
-					$("#scrt").text(parseInt($("#scrt").val())+1);
-				}
-				
 				// Update game logic
 				gameManager.responsible = (gameManager.responsible==1)?0:1;
 				gameManager.ball.hitPlayer = gameManager.responsible;
