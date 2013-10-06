@@ -2,9 +2,27 @@
 <!-- Osvaldo Rosado, Keaton Brandt, 2013 -->
 <html>
 	<head>
-		<title>TurboNinja Viewer</title>
+		<title>TurboNinja Controller</title>
 		<link rel="stylesheet" href="res/style.css" type="text/css">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
+		<script src="./vendor/shakejs/shake.js"></script>
+		<script>
+		function getUrlVars() { 
+			var vars = {}; 
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { 
+				vars[key] = value; 
+			}); 
+			return vars; 
+		} 
+		var messageObject = new Firebase('https://turbo-ninja.firebaseIO.com/games/'+getUrlVars()['gameID']);
+		$(window).load(function(){
+			window.addEventListener('shake', shakeEventDidOccur, false);
+			function shakeEventDidOccur () {
+				messageObject.update({'user':getUrlVars()['userID'],'action':'push'});
+			}
+		});
+		</script>
 	</head>
 	<body>
 		<div class="magenta"></div>
