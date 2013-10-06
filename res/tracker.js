@@ -18,6 +18,10 @@ function startTurboNinja(div)
 	canvas.height = 600;
 	canvas.style.border = "1px solid black";
 	canvas.style.background = "url('./img/arena.png')";
+<<<<<<< HEAD
+=======
+	canvas.style.backgroundSize = "100% 100%";
+>>>>>>> game-mechanics
 	canvas.context = canvas.getContext("2d");
 	canvasContainer.appendChild(canvas);
 	

@@ -19,11 +19,32 @@ var gameManager = {
 	lastHitTime: 0,
 	hitCount: 0,
 	ball: {hitX: 0, hitY: 0, hitPlayer: 0, dx: 0, dy: 0, dz: 0},
+	userToken: parseInt(Math.random()*99999),
+	lastUserToken: "",
 	
 	// Constants
 	startSpeed: {x: 0, y: 0, z: 1},
 	hitThreshold: 40,
-	speedIncreaseFactor: 1.5,
+	speedIncreaseFactor: 1.25,
+	paddleConcave: 1,
+	
+	showQRCode: function(gameID, callback){
+		$("#showID").show(); $("#startSelect").show(); $("#connectMobile").show();
+		
+		/*$('#qrcode').qrcode({
+			width: 240,
+			height: 240, 
+			text: "google.com"});//"http://turbo-ninja-client.appspot.com/?gameID="+gameID+"&userID="+gameManager.userToken});
+		*/
+		
+		var url = encodeURIComponent("http://turbo-ninja-client.appspot.com/?gameID="+gameID+"&userID="+gameManager.userToken);
+		$("#qrcode").attr("src","https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl="+url);
+		$("#qrContinue").bind("click",function(){
+			$("#qrContinue").val("Please Wait...");
+			$("#qrContinue").attr("disabled","disabled");
+			callback();	
+		});
+	},
 	
 	createGame: function(){
 		// Create game
@@ -33,13 +54,17 @@ var gameManager = {
 		gameManager.games.set(gameValue);
 		console.log("Creating Game: "+gameID);
 		
-		// Listen for the game join
-		gameManager.games.once('child_changed', function(snapshot) {
-			console.log("Game joined");
-			gameManager.setupGame(gameID);
-			gameManager.startGaming(gameID);
-		});
+		gameManager.showQRCode(gameID, function(){
 		
+			// Listen for the game join
+			gameManager.games.once('child_changed', function(snapshot) {
+				console.log("Game joined");
+				gameManager.setupGame(gameID);
+				gameManager.startGaming(gameID);
+			});
+		
+		});
+			
 		// Set the state
 		gameManager.isHost = true;
 		gameManager.isResponsible = true;
@@ -49,15 +74,17 @@ var gameManager = {
 	},
 	
 	joinGame: function(gameID){
-		gameManager.game = new Firebase(gameManager.url + "/" + gameID);
-		gameManager.game.once("value",function(gameObject){
-			var gameValue = gameObject.val();
-			if(gameValue == undefined || !("started" in gameValue))return alert("Game does not exist");
-			if(gameValue.started !== false)return alert("Game has already started");
-			gameManager.game.update({started: true});
-			setTimeout(function(){
-				gameManager.startGaming(gameID);
-			},500);
+		gameManager.showQRCode(gameID, function(){
+			gameManager.game = new Firebase(gameManager.url + "/" + gameID);
+			gameManager.game.once("value",function(gameObject){
+				var gameValue = gameObject.val();
+				if(gameValue == undefined || !("started" in gameValue))return alert("Game does not exist");
+				if(gameValue.started !== false)return alert("Game has already started");
+				gameManager.game.update({started: true});
+				setTimeout(function(){
+					gameManager.startGaming(gameID);
+				},500);
+			});
 		});
 	},
 	
@@ -71,6 +98,7 @@ var gameManager = {
 			responsible: 0,
 			isLaunching: true,
 			hitCount: 0,
+			user: 0,
 			score: [0,0]
 		});
 	},
@@ -79,7 +107,7 @@ var gameManager = {
 	startGaming: function(gameID){
 		
 		// Start game
-		$("#showID").hide(); $("#startSelect").hide(); $("#game").show();
+		$("#connectMobile").hide(); $("#showID").hide(); $("#startSelect").hide(); $("#game").show();
 		startTurboNinja("gameDiv");
 		
 		// Configure state
@@ -92,31 +120,34 @@ var gameManager = {
 			// Update cursors
 			if(snapshot.name().indexOf("Cursor")!==-1)return gameManager.updateCursors(snapshot);
 			
-			if(snapshot.name() == "ball"){gameManager.lastHitTime = new Date().getTime();gameManager.ball = snapshot.val();}
-			if(snapshot.name() == "isLaunching")gameManager.isLaunching = snapshot.val();
+			if(snapshot.name() == "ball"){
+				gameManager.lastHitTime = new Date().getTime();
+				gameManager.ball = snapshot.val();
+			}
+			if(snapshot.name() == "isLaunching"){
+				gameManager.isLaunching = snapshot.val();
+				if(!gameManager.isLaunching)return;
+				if(gameManager.isResponsible)
+				{
+					$("#scrm").html(parseInt($("#scrm").html())+1);
+				}else{
+					$("#scrt").html(parseInt($("#scrt").html())+1);
+				}	
+			}
 			if(snapshot.name() == "responsible"){
 				gameManager.responsible = snapshot.val();
 				gameManager.isResponsible = (gameManager.isHost)?(gameManager.responsible==0):(gameManager.responsible==1);}
 			if(snapshot.name() == "hitCount")gameManager.hitCount = snapshot.val();
+			if(snapshot.name() == "user"){
+				if(snapshot.val() != gameManager.userToken)return;
+				gameManager.throw();
+				gameManager.game.update({user:0});
+			}
 			
 		});
 		
 		// Temporary thing to launch the ball
-		$("body").on("click",function(){
-			if(gameManager.isLaunching && gameManager.isResponsible){
-				gameManager.lastHitTime = new Date().getTime();
-				gameManager.isLaunching = false;
-				
-				gameManager.ball.dx = gameManager.startSpeed.x;
-				gameManager.ball.dy = gameManager.startSpeed.y;
-				gameManager.ball.dz = gameManager.startSpeed.z;
-				gameManager.ball.hitPlayer = gameManager.responsible;
-				
-				gameManager.responsible = (gameManager.responsible==1)?0:1;
-				
-				gameManager.game.update({hitCount: gameManager.hitCount++, ball:gameManager.ball, isLaunching: false, responsible: gameManager.responsible});
-			}
-		});
+		$("body").on("click",gameManager.throw);
 		
 		// Send cursor position routinely
 		setInterval(function(){
@@ -127,6 +158,23 @@ var gameManager = {
 		
 		// Ball loop
 		setInterval(gameManager.trackBall, 30);
+	},
+	
+	// Throw the ball
+	throw: function(){
+		if(gameManager.isLaunching && gameManager.isResponsible){
+			gameManager.lastHitTime = new Date().getTime();
+			gameManager.isLaunching = false;
+			
+			gameManager.ball.dx = gameManager.startSpeed.x;
+			gameManager.ball.dy = gameManager.startSpeed.y;
+			gameManager.ball.dz = gameManager.startSpeed.z;
+			gameManager.ball.hitPlayer = gameManager.responsible;
+			
+			gameManager.responsible = (gameManager.responsible==1)?0:1;
+			
+			gameManager.game.update({hitCount: gameManager.hitCount++, ball:gameManager.ball, isLaunching: false, responsible: gameManager.responsible});
+		}
 	},
 	
 	// Update Cursor Positions accordingly
@@ -173,15 +221,14 @@ var gameManager = {
 				gameManager.lastHitTime = new Date().getTime();
 				gameManager.ball.hitPlayer = gameManager.responsible;
 				gameManager.responsible = (gameManager.responsible==1)?0:1;
-				gameManager.ball.dx = bp.x-window.phone.x;
-				gameManager.ball.dy = bp.y-window.phone.y;
+				gameManager.ball.dx = bp.x-window.phone.x * gameManager.paddleConcave;
+				gameManager.ball.dy = bp.y-window.phone.y * gameManager.paddleConcave;
 				gameManager.ball.dz *= gameManager.speedIncreaseFactor;
 				
 				gameManager.game.update({hitCount: gameManager.hitCount++, ball:gameManager.ball, responsible: gameManager.responsible});
 				
 			}else{
-				alert("NOO YOU MISSED WHY");
-				
+				// Update game logic
 				gameManager.responsible = (gameManager.responsible==1)?0:1;
 				gameManager.ball.hitPlayer = gameManager.responsible;
 				gameManager.ball.dz = 0; gameManager.ball.dx = 0; gameManager.ball.dy = 0;
