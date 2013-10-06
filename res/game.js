@@ -23,7 +23,7 @@ var gameManager = {
 	// Constants
 	startSpeed: {x: 0, y: 0, z: 1},
 	hitThreshold: 40,
-	speedIncreaseFactor: 1.5;
+	speedIncreaseFactor: 1.5,
 	
 	createGame: function(){
 		// Create game
